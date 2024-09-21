@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+option csharp_namespace = "Server";
+
+package db_manager;
+
+// The DataBase management service definition
+service DBmanagement {
+  // Gets data of the client with id specified in ClientDataLookupModel
+  rpc GetID (ClientIdRequest) returns (ClientDataLookupModel);
+  rpc GetData (ClientDataLookupModel) returns (ClientDataModel);
+  rpc SaveData (ClientDataModel) returns (DataSavedResponce);
+}
+
+service OperationsManagement {
+	rpc PerformFullMultiplication (MultiplicationParameters) returns (DataTableSO);
+}
+
+message MultiplicationParameters {
+	DataTableSO first = 1;
+	DataTableSO second = 2;
+}
+
+message ClientIdRequest {
+
+}
+
+message DataSavedResponce {
+	bool success = 1;
+	optional string message = 2;
+}
+// The request message containing the client`s id
+message ClientDataLookupModel {
+  int32 client_id = 1;
+}
+
+message ClientDataModel {
+	int32 client_id = 1;
+	repeated DataBaseSO bases = 2;
+}
+//SO = serialization object
+message DataBaseSO {
+	string name = 1;
+	int32 id = 2;
+	repeated DataTableSO tables = 3;
+}
+//SO = serialization object
+message DataTableSO {
+	string name = 1;
+	int32 id = 2;
+	repeated DataColumnSO columns = 3;
+	repeated DataRowSO rows = 4;
+}
+//SO = serialization object
+message DataColumnSO {
+	string name = 1;
+	string supported_type = 2;
+}
+//SO = serialization object
+message DataRowSO {
+	repeated string data = 1;
+}
